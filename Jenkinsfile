@@ -8,12 +8,14 @@ pipeline {
     }
     stage ('Build Image') {
       steps {
-        withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {                   
-          docker.build("koyaadeniji/koyaadeniji-ecommerceapp:latest")
+        script {
+          withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
+            docker.build("koyaadeniji/koyaadeniji-ecommerceapp:latest")
           //sh 'docker build -t koyaadeniji/koyaadeniji-ecommerceapp .'
           //sh 'docker push ${REGISTRY_TAG}'
         }
       }
+    }
     }
     stage ('Delete Images') {
       steps {
