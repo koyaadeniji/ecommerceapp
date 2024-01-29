@@ -1,41 +1,31 @@
 pipeline {
   agent any
-
   environment {
-    REPO_TAG           = "public.ecr.aws/v0k9v4f2"
-    APP_NAME           = "myapp"
-    VERSION            = "${BUILD_ID}"
+    SERVICE_NAME       = "ecommerceapp"
+    ORGANIZATION_NAME  = "koyaadeniji"
+    DOCKERHUB_USERNAME = "koyaadeniji"
+    REGISTRY_TAG       = "${DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
   }
-
+  
   stages {
-
     stage ('Print ENVs') {
       steps {
         sh 'printenv'
       }
     }
     
-    stage ('Docker Login') {
+    stage ('Build Image') {
       steps {
-         withEnv(["AWS_ACCESS_KEY_ID=${env.AWS_ACCESS_KEY_ID}", "AWS_SECRET_ACCESS_KEY=${env.AWS_SECRET_ACCESS_KEY}", "AWS_DEFAULT_REGION=${env.AWS_DEFAULT_REGION}"]) {
-          sh 'docker login -u AWS -p $(aws ecr-public get-login-password --region us-east-1) ${REPO_TAG}'
-         }
-       }
+        withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
+          sh 'docker build -t ${REGISTRY_TAG} .'
+          sh 'docker push ${REGISTRY_TAG}'
+        }
+      }
     }
-    stage ('Docker Build') {
+    stage ('Delete Images') {
       steps {
-         withEnv(["AWS_ACCESS_KEY_ID=${env.AWS_ACCESS_KEY_ID}", "AWS_SECRET_ACCESS_KEY=${env.AWS_SECRET_ACCESS_KEY}", "AWS_DEFAULT_REGION=${env.AWS_DEFAULT_REGION}"]) {
-          sh 'docker build -t ${APP_NAME}:${VERSION} .'
-         }
-       }
+        sh 'docker rmi -f $(docker images -qa)'
+      }
     }
-    stage ('Publish to Public ECR') {
-      steps {
-         withEnv(["AWS_ACCESS_KEY_ID=${env.AWS_ACCESS_KEY_ID}", "AWS_SECRET_ACCESS_KEY=${env.AWS_SECRET_ACCESS_KEY}", "AWS_DEFAULT_REGION=${env.AWS_DEFAULT_REGION}"]) {
-          sh 'docker tag ${APP_NAME}:${VERSION} ${REPO_TAG}/${APP_NAME}:${VERSION}'
-          sh 'docker push ${REPO_TAG}/${APP_NAME}:${VERSION}'
-         }
-       }
-    }    
   }
 }
