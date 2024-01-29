@@ -2,7 +2,7 @@ pipeline {
   agent any 
   environment {
     SERVICE_NAME       =    "ecommerceapp"
-    ORGANIZATION_NAME  =    "koyaadeniji"
+    ORGANIZATION_NAME  =    "myapp"
     DOCKERHUB_USERNAME =    "koyaadeniji"
     REGISTRY_TAG       =    "${DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
     VERSION            = "${BUILD_ID}"
@@ -28,7 +28,7 @@ pipeline {
     stage ('Build and Push Docker Image') {
            steps {
              withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
-               //sh 'docker build -t koyaadeniji/ecommerceapp .'
+               //sh 'docker build -t ${REGISTRY_TAG} .'
               // sh 'docker push ${REGISTRY_TAG}'
              }
            }
