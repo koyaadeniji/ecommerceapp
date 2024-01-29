@@ -2,7 +2,7 @@ pipeline {
   agent any 
   environment {
     SERVICE_NAME       =    "ecommerceapp"
-    ORGANIZATION_NAME  =    "koyaadeniji"
+    ORGANIZATION_NAME  =    "Koya Adeniji"
     DOCKERHUB_USERNAME =    "koyaadeniji"
     REGISTRY_TAG       =    "${DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
     VERSION            = "${BUILD_ID}"
