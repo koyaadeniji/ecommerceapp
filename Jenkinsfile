@@ -28,7 +28,7 @@ pipeline {
     stage ('Build and Push Docker Image') {
            steps {
              withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
-               //sh 'docker build -t ${REGISTRY_TAG} .'
+               sh 'docker build -t ${REGISTRY_TAG} .'
               // sh 'docker push ${REGISTRY_TAG}'
              }
            }
