@@ -4,7 +4,7 @@ pipeline {
     SERVICE_NAME       =    "ecommerceapp"
     ORGANIZATION_NAME  =    "koyaadeniji"
     DOCKERHUB_USERNAME =    "koyaadeniji"
-    REGISTRY_TAG       =    "${DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}
+    REGISTRY_TAG       =    "${DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
     VERSION            = "${BUILD_ID}"
   }
   stages {
