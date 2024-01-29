@@ -28,11 +28,23 @@ pipeline {
     stage ('Build and Push Docker Image') {
            steps {
              withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
-               sh 'docker build -t ${REGISTRY_TAG} .'
-               sh 'docker push ${REGISTRY_TAG}'
+               //sh 'docker build -t ${REGISTRY_TAG} .'
+               //sh 'docker push ${REGISTRY_TAG}'
              }
            }
         }
+    stage('Build Docker Image') {
+            steps {
+                script {
+                    // Define the Docker image name and tag
+                    def dockerImage = "koyaadeniji/ecommerceapp:${env.BUILD_NUMBER}"
+
+                    // Build the Docker image
+                    sh "docker build -t ${dockerImage} ."
+                }
+            }
+        }
+    
     stage ('Delete Images') {
       steps {
         sh 'docker rmi -f $(docker images -qa)'
