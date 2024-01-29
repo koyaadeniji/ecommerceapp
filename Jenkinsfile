@@ -1,57 +1,35 @@
 pipeline {
-  agent any 
+  agent any
+
+  environment {
+    REPO_TAG           = "public.ecr.aws/v0k9v4f2"
+    APP_NAME           = "myapp"
+    VERSION            = "${BUILD_ID}"
+  }
+
   stages {
+
     stage ('Print ENVs') {
       steps {
         sh 'printenv'
       }
     }
-    stage('Check DockerHub Connection') {
-      steps {
-        script {
-          try {
-            sh 'docker info'
-            echo 'Docker Hub is linked.'
-          } catch (Exception e) {
-            error 'Failed to connect to Docker Hub. Check Docker Hub credentials.'
-          }
-        }
-      }
-    }
-    //stage ('Build and Push Docker Image') {
-           //steps {
-             //withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
-               //sh 'docker build -t ${REGISTRY_TAG} .'
-               //sh 'docker push ${REGISTRY_TAG}'
-             //}
-           //}
-        //}
-    stage('Build Docker Image') {
-            steps {
-                script {
-                    // Define the Docker image name and tag
-                    def dockerImage = "koyaadeniji/ecommerceapp:${env.BUILD_NUMBER}"
-
-                    // Build the Docker image
-                    sh "docker build -t ${dockerImage} ."
-                }
-            }
-        }
     
+    stage ('Publish to Public ECR') {
+      steps {
+         withEnv(["AWS_ACCESS_KEY_ID=${env.AWS_ACCESS_KEY_ID}", "AWS_SECRET_ACCESS_KEY=${env.AWS_SECRET_ACCESS_KEY}", "AWS_DEFAULT_REGION=${env.AWS_DEFAULT_REGION}"]) {
+          sh 'docker login -u AWS -p $(aws ecr-public get-login-password --region us-east-1) ${REPO_TAG}'
+          sh 'docker build -t ${APP_NAME}:${VERSION} .'
+          sh 'docker tag ${APP_NAME}:${VERSION} ${REPO_TAG}/${APP_NAME}:${VERSION}'
+          sh 'docker push ${REPO_TAG}/${APP_NAME}:${VERSION}'
+         }
+       }
+    }
+
     stage ('Delete Images') {
       steps {
         sh 'docker rmi -f $(docker images -qa)'
       }
     }
-           }
-           }
-           
-         
-         
-         
-         
-         
-         
-           
-           
-    
+  }
+}
