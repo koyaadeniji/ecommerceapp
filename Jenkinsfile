@@ -8,7 +8,7 @@ pipeline {
     VERSION            = "${BUILD_ID}"
   }
   stages {
-    stage ('Print ENVs) {
+    stage ('Print ENVs') {
       steps {
         sh 'printenv'
       }
@@ -25,17 +25,17 @@ pipeline {
         }
       }
     }
-    stage ('Build and Push Docker Image) {
+    stage ('Build and Push Docker Image') {
            steps {
              withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
-               sh 'docker build -t ${REGISTRY_TAG} .}
+               sh 'docker build -t ${REGISTRY_TAG} .'
                sh 'docker push ${REGISTRY_TAG}'
              }
            }
         }
     stage ('Delete Images') {
       steps {
-        sh 'docker rmi -f $(docker images -qa)
+        sh 'docker rmi -f $(docker images -qa)'
       }
     }
            }
