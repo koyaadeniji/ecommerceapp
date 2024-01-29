@@ -36,10 +36,6 @@ pipeline {
           sh 'docker push ${REPO_TAG}/${APP_NAME}:${VERSION}'
          }
        }
-    }
-    
-    
-
-    
+    }    
   }
 }
