@@ -10,8 +10,8 @@ pipeline {
       steps {
         script {
           withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
-            docker.build("koyaadeniji/koyaadeniji-ecommerceapp:latest")
-          //sh 'docker build -t koyaadeniji/koyaadeniji-ecommerceapp .'
+            //docker.build("koyaadeniji/koyaadeniji-ecommerceapp:latest")
+            sh 'docker build -t koyaadeniji/koyaadeniji-ecommerceapp .'
           //sh 'docker push ${REGISTRY_TAG}'
         }
       }
