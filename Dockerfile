@@ -1,8 +1,8 @@
 FROM centos:centos7
 RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-RUN sudo yum update && yum install nginx -y
-RUN sudo systemctl start nginx
-RUN sudo systemctl enable nginx
+RUN sudo yum update && yum install httpd -y
+RUN sudo systemctl start httpd
+RUN sudo systemctl enable httpd
 
 
 CMD tail -f /dev/null
