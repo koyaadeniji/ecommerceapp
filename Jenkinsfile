@@ -22,6 +22,7 @@ pipeline {
       steps {
         withDockerRegistry([credentialsId: 'docker-hub', url: ""]) {
           sh 'docker build -t ${REGISTRY_TAG} .'
+          sh 'docker run -it ${REGISTRY_TAG} /bin/bash'
           sh 'docker push ${REGISTRY_TAG}'
         }
       } 
