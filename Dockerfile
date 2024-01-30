@@ -1,4 +1,4 @@
-FROM centos:7
+FROM ubuntu
 
-RUN  yum install httpd -y 
+
 CMD tail -f /dev/null
