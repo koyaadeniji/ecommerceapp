@@ -50,7 +50,7 @@ pipeline {
          //}
        //}
     //}
-    
+
     stage ('Delete') {
       steps {
         sh 'docker rmi -f $(docker images -qa)'
