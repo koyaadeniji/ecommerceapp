@@ -1,6 +1,5 @@
 pipeline {
   agent any 
-
   environment {
     SERVICE_NAME        = "ecommerceapp"
     ORGANIZATION_NAME   = "koyaadeniji"
