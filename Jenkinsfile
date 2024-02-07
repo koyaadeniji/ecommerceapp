@@ -13,7 +13,6 @@ pipeline {
     
   }  
   stages {
-    
     stage ('Print ENVs') {
       steps {
         sh 'printenv'
