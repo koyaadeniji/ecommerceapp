@@ -11,7 +11,8 @@ pipeline {
     //PRIVATE_APP_NAME   = "cohortimages"
     VERSION            = "${BUILD_ID}"
     
-  }  
+  } 
+  
   stages {
     stage ('Print ENVs') {
       steps {
